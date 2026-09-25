@@ -247,18 +247,16 @@ def send_start(message):
         bot.reply_to(
             message, 
             "🤖 <b>Ultimate Syndicate AI Pro</b> platformasiga xush kelibsiz!\n\n"
-            "Aniq stavka tavsiyalari va avtomatik live tahlil tizimi tayyor.", 
+            "Barcha funksiyalar (Line Shopping, Poisson, Kelli, Aniq stavkalar) ishga tushdi.", 
             parse_mode="HTML", 
             reply_markup=get_main_keyboard()
         )
     except Exception as e:
         bot.reply_to(message, f"Xatolik: {e}")
 
-# Avtomatik live o'yinlar (Agar o'yinlar bo'lmasa to'g'ri xabar beradigan qilib)
 @bot.message_handler(func=lambda message: message.text == "🔥 Barcha Live O'yinlar")
 def send_auto_live_list(message):
     try:
-        # Haqiqiy jonli o'yinlar ro'yxati (Agar o'yinlar bo'lmasa bo'sh ro'yxat qaytariladi)
         live_matches = [
             {
                 "match": "O'zbekiston U23 - Saudiya Arabistoni U23",
@@ -282,7 +280,6 @@ def send_auto_live_list(message):
             }
         ]
         
-        # O'yinlar mavjud bo'lmasa
         if not live_matches:
             bot.reply_to(
                 message, 
@@ -405,4 +402,3 @@ if __name__ == '__main__':
     print("Syndicate Pro AI Bot barcha imkoniyatlar bilan ishga tushdi!")
     bot.remove_webhook()
     bot.infinity_polling(skip_pending=True)
-        
