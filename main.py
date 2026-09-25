@@ -76,7 +76,8 @@ def system_health_probe():
 
 def launch_flask_server_worker():
     try:
-        app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
+        port_val = int(os.environ.get("PORT", 10000))
+        app.run(host='0.0.0.0', port=port_val, debug=False, use_reloader=False)
     except Exception as server_error:
         print(f"[CRITICAL_ERROR] Flask Server Thread Exception: {server_error}")
 
@@ -154,7 +155,6 @@ def initialize_mega_enterprise_databases():
             connection.commit()
             connection.close()
 
-            # 10 yillik tarixiy arxiv bazasi
             hist_conn = sqlite3.connect(DEEP_ARCHIVE_DATABASE, timeout=30)
             hist_cursor = hist_conn.cursor()
             hist_cursor.execute('''
@@ -342,14 +342,11 @@ def compute_kelly_criterion_stake_mega(decimal_odds, win_probability_pct):
     return min(max(fractional_kelly * 100, 0.0), 25.0)
 
 def generate_1000000x_mega_enterprise_ai_report(match_name="Real Madrid vs Barcelona", init_odds=2.00, curr_odds=1.72, xg_h=2.4, xg_a=0.95, user_id=None):
-    # 1. 10 yillik chuqur arxiv tahlili
     historical_summary = query_decade_historical_archive_deep("Real", "Barcelona")
     
-    # 2. Monte Carlo 50,000 simulyatsiya va Poisson matritsa
     h_win_pct, a_win_pct, draw_pct, expected_total_goals = run_monte_carlo_mega_simulation(xg_h, xg_a)
     record_simulation_metrics_db(match_name, h_win_pct, a_win_pct, draw_pct, expected_total_goals)
     
-    # 3. Live minute-by-minute pulse simulation & Memory Reinforcement
     current_match_minute = random.randint(70, 89)
     pulse_shift_description = f"{current_match_minute}-daqiqada mezbonlarning hujum intensivligi va pressingi 78% ga yetdi."
     record_memory_reinforcement_pulse(match_name, current_match_minute, pulse_shift_description, +8.1)
@@ -408,4 +405,5 @@ def build_mega_enterprise_reply_keyboard():
     btn_mega_live = types.KeyboardButton("👑 1,000,000x Mega Kvant Tahlil")
     btn_decade_archive = types.KeyboardButton("📜 10 Yillik Chuqur Arxiv")
     btn_memory_journal = types.KeyboardButton("🧠 Xotirani Mustahkamlash Jurnali")
-    
+    btn_user_cabinet = types.KeyboardButton("💰 Mening Mega Kabinetim")
+    btn_audit_history = types.KeyboardButton("📜 Audit &
