@@ -406,4 +406,190 @@ def build_mega_enterprise_reply_keyboard():
     btn_decade_archive = types.KeyboardButton("📜 10 Yillik Chuqur Arxiv")
     btn_memory_journal = types.KeyboardButton("🧠 Xotirani Mustahkamlash Jurnali")
     btn_user_cabinet = types.KeyboardButton("💰 Mening Mega Kabinetim")
-    btn_audit_history = types.KeyboardButton("📜 Audit &
+    btn_audit_history = types.KeyboardButton("📜 Audit & Harakatlar Tarixi")
+    keyboard_markup.add(btn_mega_live, btn_decade_archive, btn_memory_journal, btn_user_cabinet, btn_audit_history, btn_help_menu)
+    return keyboard_markup
+
+@telegram_bot_client.message_handler(commands=['start'])
+def handle_telegram_start_command(message):
+    user_identifier = message.from_user.id
+    user_handle = message.from_user.username or "MegaTrader"
+    get_or_register_user_profile(user_identifier, user_handle)
+    write_audit_log_entry(user_identifier, "COMMAND_START", "User initialized 1,000,000x mega enterprise session.")
+    
+    telegram_bot_client.reply_to(
+        message,
+        "👑 <b>Quantum Syndicate AI Pro — 1,000,000x Mega Enterprise Cluster</b> tizimiga xush kelibsiz!\n\n"
+        "10 yillik chuqur arxiv, Monte Carlo 50,000x simulyatsiya, har daqiqalik xotirani mustahkamlash va mega tahlil motorlari to'liq quvvatda ishga tushdi.",
+        parse_mode="HTML",
+        reply_markup=build_mega_enterprise_reply_keyboard()
+    )
+
+@telegram_bot_client.message_handler(func=lambda msg: msg.text == "👑 1,000,000x Mega Kvant Tahlil")
+def handle_telegram_mega_live_analysis(message):
+    user_identifier = message.from_user.id
+    write_audit_log_entry(user_identifier, "MEGA_QUANTUM_ANALYSIS", "Requested 1,000,000x AI mega signal.")
+    try:
+        signal_output = generate_1000000x_mega_enterprise_ai_report(user_id=user_identifier)
+        telegram_bot_client.reply_to(message, signal_output, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+    except Exception as err:
+        telegram_bot_client.reply_to(message, f"Tahlil yaratishda xatolik: {err}")
+
+@telegram_bot_client.message_handler(func=lambda msg: msg.text == "📜 10 Yillik Chuqur Arxiv")
+def handle_telegram_decade_archive(message):
+    try:
+        hist_conn = sqlite3.connect(DEEP_ARCHIVE_DATABASE, timeout=10)
+        cursor = hist_conn.cursor()
+        cursor.execute("SELECT season, home_team, away_team, full_time_score, h2h_dominance_score FROM historical_decade_matches LIMIT 8")
+        rows = cursor.fetchall()
+        hist_conn.close()
+        
+        report_text = "📜 <b>Oxirgi 10 yillik chuqur arxiv ma'lumotlari:</b>\n\n"
+        for r in rows:
+            report_text += f"• [{r[0]}] {r[1]} vs {r[2]} — Hisob: <b>{r[3]}</b> (Dominantlik: {r[4]})\n"
+        telegram_bot_client.reply_to(message, report_text, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+    except Exception as err:
+        telegram_bot_client.reply_to(message, f"Arxiv xatosi: {err}")
+
+@telegram_bot_client.message_handler(func=lambda msg: msg.text == "🧠 Xotirani Mustahkamlash Jurnali")
+def handle_telegram_memory_journal(message):
+    try:
+        with GLOBAL_SYSTEM_LOCK:
+            connection = sqlite3.connect(MASTER_DATABASE_FILE, timeout=10)
+            cursor_obj = connection.cursor()
+            cursor_obj.execute("SELECT match_name, minute_mark, live_pulse_shift, confidence_delta, timestamp FROM memory_reinforcement_log ORDER BY id DESC LIMIT 8")
+            rows = cursor_obj.fetchall()
+            connection.close()
+            
+        if not rows:
+            telegram_bot_client.reply_to(message, "Hozircha xotirani mustahkamlash jurnali bo'sh.", reply_markup=build_mega_enterprise_reply_keyboard())
+            return
+            
+        history_text = "🧠 <b>Har daqiqalik xotirani mustahkamlash jurnali:</b>\n\n"
+        for r in rows:
+            history_text += f"• ⚽ {r[0]} ({r[1]}-daqiqada): {r[2]} (Delta: {r[3]:+.1f}%) — <i>{r[4]}</i>\n"
+        telegram_bot_client.reply_to(message, history_text, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+    except Exception as err:
+        telegram_bot_client.reply_to(message, f"Jurnal xatosi: {err}")
+
+@telegram_bot_client.message_handler(func=lambda msg: msg.text == "💰 Mening Mega Kabinetim")
+def handle_telegram_user_portfolio(message):
+    user_identifier = message.from_user.id
+    write_audit_log_entry(user_identifier, "VIEW_PORTFOLIO", "Opened mega bankroll cabinet.")
+    try:
+        balance, profit, wins, losses, rep, vip = get_or_register_user_profile(user_identifier)
+        cabinet_output = (
+            "💰 <b>SHAXSIY MEGA KVANT BANKROLL KABINETI</b>\n\n"
+            f"• Joriy Balans: <b>{balance:.2f}</b>\n"
+            f"• Umumiy Foyda / Zarar: <b>{profit:+.2f}</b>\n"
+            f"• Yutuqlar: <b>{wins}</b> | Yutqazishlar: <b>{losses}</b>\n"
+            f"• Trader Obro' Reytingi: <b>{rep} ball 🌟</b>\n"
+            f"• VIP Status: <b>{vip}</b>\n\n"
+            "💡 <i>Balansni o'zgartirish uchun:</i> <code>/balance 150000</code>"
+        )
+        telegram_bot_client.reply_to(message, cabinet_output, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+    except Exception as err:
+        telegram_bot_client.reply_to(message, f"Kabinet xatosi: {err}")
+
+@telegram_bot_client.message_handler(commands=['balance'])
+def handle_telegram_balance_modification(message):
+    user_identifier = message.from_user.id
+    write_audit_log_entry(user_identifier, "UPDATE_BALANCE", "Attempted balance modification.")
+    try:
+        tokens_list = message.text.split()
+        if len(tokens_list) >= 2:
+            new_balance_val = float(tokens_list[1])
+            with GLOBAL_SYSTEM_LOCK:
+                connection = sqlite3.connect(MASTER_DATABASE_FILE, timeout=10)
+                cursor_obj = connection.cursor()
+                cursor_obj.execute("UPDATE users SET balance = ? WHERE user_id = ?", (new_balance_val, user_identifier))
+                connection.commit()
+                connection.close()
+            telegram_bot_client.reply_to(message, f"✅ Balansingiz muvaffaqiyatli <b>{new_balance_val:.2f}</b> ga yangilandi!", parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+        else:
+            telegram_bot_client.reply_to(message, "Namuna: <code>/balance 200000</code>", parse_mode="HTML")
+    except Exception:
+        telegram_bot_client.reply_to(message, "Xatolik! Raqamni to'g'ri formatda kiriting.")
+
+@telegram_bot_client.message_handler(func=lambda msg: msg.text == "📜 Audit & Harakatlar Tarixi")
+def handle_telegram_audit_history(message):
+    user_identifier = message.from_user.id
+    try:
+        with GLOBAL_SYSTEM_LOCK:
+            connection = sqlite3.connect(MASTER_DATABASE_FILE, timeout=10)
+            cursor_obj = connection.cursor()
+            cursor_obj.execute("SELECT action_category, action_details, timestamp FROM audit_logs WHERE user_id = ? ORDER BY id DESC LIMIT 10", (user_identifier,))
+            rows_fetched = cursor_obj.fetchall()
+            connection.close()
+            
+        if not rows_fetched:
+            telegram_bot_client.reply_to(message, "Hozircha audit tarixi bo'sh.", reply_markup=build_mega_enterprise_reply_keyboard())
+            return
+            
+        history_report_text = "📜 <b>Oxirgi harakatlaringiz auditi:</b>\n\n"
+        for category, details, timestamp in rows_fetched:
+            history_report_text += f"• <b>{category}</b> ({details}) — <i>{timestamp}</i>\n"
+        telegram_bot_client.reply_to(message, history_report_text, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+    except Exception as err:
+        telegram_bot_client.reply_to(message, f"Tarixni o'qishda xatolik: {err}")
+
+@telegram_bot_client.message_handler(commands=['help'])
+@telegram_bot_client.message_handler(func=lambda msg: msg.text == "❓ Yordam & Qo'llanma")
+def handle_telegram_help_menu(message):
+    help_content_text = (
+        "👑 <b>Quantum Syndicate 1,000,000x Mega Enterprise Qo'llanmasi</b>\n\n"
+        "• 👑 1,000,000x Mega Kvant Tahlil - Monte Carlo 50,000x va 10 yillik chuqur arxiv\n"
+        "• 📜 10 Yillik Chuqur Arxiv - O'tgan yillardagi barcha uchrashuvlar bazasi\n"
+        "• 🧠 Xotirani Mustahkamlash Jurnali - Har daqiqalik live mikro-o'zgarishlar\n"
+        "• 💰 Mening Mega Kabinetim - Balans va foyda nazorati\n"
+        "• /balance [summa] - Balansni qo'lda belgilash\n\n"
+        "Qo'lda tahlil qilish uchun format:\n"
+        "<code>Arsenal-Chelsea 1.90 1.70 2.5 1.0</code>"
+    )
+    telegram_bot_client.reply_to(message, help_content_text, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+
+@telegram_bot_client.message_handler(func=lambda message: True)
+def handle_telegram_custom_analysis_input(message):
+    user_identifier = message.from_user.id
+    try:
+        tokens_array = message.text.split()
+        if len(tokens_array) >= 5:
+            match_title_str = tokens_array[0]
+            init_odds_val = float(tokens_array[1])
+            curr_odds_val = float(tokens_array[2])
+            xg_home_val = float(tokens_array[3])
+            xg_away_val = float(tokens_array[4])
+            
+            write_audit_log_entry(user_identifier, "CUSTOM_MEGA_ANALYSIS", f"Match: {match_title_str}")
+            custom_signal_result = generate_1000000x_mega_enterprise_ai_report(
+                match_name=match_title_str,
+                init_odds=init_odds_val,
+                curr_odds=curr_odds_val,
+                xg_h=xg_home_val,
+                xg_a=xg_away_val,
+                user_id=user_identifier
+            )
+            telegram_bot_client.reply_to(message, custom_signal_result, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+        else:
+            telegram_bot_client.reply_to(message, "Noto'g'ri format. Yordam uchun /help buyrug'ini bosing.", reply_markup=build_mega_enterprise_reply_keyboard())
+    except Exception:
+        telegram_bot_client.reply_to(message, "Xatolik! Namuna bo'yicha kiriting:\n<code>Arsenal-Chelsea 1.90 1.70 2.5 1.0</code>", parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+
+# ==============================================================================
+# 5. ENTERPRISE CLUSTER BOOTSTRAPPER & MAIN LAUNCHER
+# ==============================================================================
+if __name__ == '__main__':
+    flask_server_worker = Thread(target=launch_flask_server_worker)
+    flask_server_worker.daemon = True
+    flask_server_worker.start()
+    
+    print("======================================================================")
+    print(" 1,000,000x Quantum Syndicate AI Pro — Mega Enterprise Cluster Started!")
+    print(" Monte Carlo 50k, 10-Year Deep Archives & Self-Learning Memory Active.")
+    print("======================================================================")
+    
+    try:
+        telegram_bot_client.remove_webhook()
+        telegram_bot_client.infinity_polling(skip_pending=True, timeout=60, long_polling_timeout=60)
+    except Exception as polling_err:
+        print(f"[CRITICAL_ERROR] Telegram Bot Polling Exception: {polling_err}")
