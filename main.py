@@ -12,9 +12,6 @@ from threading import Thread, Lock
 import telebot
 from telebot import types
 
-# ==============================================================================
-# 1. ULTIMATE MEGA-SCALE ENTERPRISE GLOBAL CONFIGURATION & ARCHITECTURE
-# ==============================================================================
 MASTER_DATABASE_FILE = 'quantum_mega_syndicate_v1000000.db'
 DEEP_ARCHIVE_DATABASE = 'decade_historical_deep_archive_v2.db'
 GLOBAL_SYSTEM_LOCK = Lock()
@@ -28,19 +25,7 @@ def system_root_dashboard():
         "status": "ONLINE",
         "cluster_name": "Quantum Syndicate AI Pro - 1,000,000x Mega Enterprise Cluster",
         "version": "1,000,000.9.0-ULTIMATE",
-        "timezone": "Asia/Tashkent",
-        "active_subsystems": [
-            "Flask Enterprise Web Gateway & Advanced Probes",
-            "SQLite High-Performance Multi-Table Mega ORM Cluster",
-            "10-Year Historical Deep Memory Archive Matrix",
-            "Monte Carlo Stochastic 50,000x Match Simulation Engine",
-            "Real-Time Minute-by-Minute Live Micro-Pulse Tracker",
-            "Adaptive Self-Learning Neural Reinforcement Feedback Loop",
-            "Multi-Bookmaker Arbitrage, Line Shopping & Odds Comparison",
-            "Kelly Criterion, Martingale & Dynamic Bankroll Risk Manager",
-            "Audit Logging, Security Surveillance & Firewall Security"
-        ],
-        "timestamp": datetime.now(pytz.timezone('Asia/Tashkent')).strftime("%Y-%m-%d %H:%M:%S")
+        "timezone": "Asia/Tashkent"
     })
 
 @app.route('/healthz')
@@ -51,26 +36,8 @@ def system_health_probe():
             cursor_obj = connection.cursor()
             cursor_obj.execute("SELECT COUNT(*) FROM predictions")
             total_preds = cursor_obj.fetchone()[0]
-            cursor_obj.execute("SELECT COUNT(*) FROM users")
-            total_users = cursor_obj.fetchone()[0]
-            cursor_obj.execute("SELECT COUNT(*) FROM audit_logs")
-            total_logs = cursor_obj.fetchone()[0]
-            cursor_obj.execute("SELECT COUNT(*) FROM memory_reinforcement_log")
-            total_memories = cursor_obj.fetchone()[0]
-            cursor_obj.execute("SELECT COUNT(*) FROM simulation_metrics")
-            total_sims = cursor_obj.fetchone()[0]
             connection.close()
-            return jsonify({
-                "status": "HEALTHY",
-                "database_status": "CONNECTED",
-                "metrics": {
-                    "stored_predictions": total_preds,
-                    "registered_users": total_users,
-                    "audit_logs_recorded": total_logs,
-                    "reinforced_memory_cycles": total_memories,
-                    "monte_carlo_simulations": total_sims
-                }
-            }), 200
+            return jsonify({"status": "HEALTHY", "total_predictions": total_preds}), 200
         except Exception as err:
             return jsonify({"status": "DEGRADED", "error_details": str(err)}), 500
 
@@ -81,9 +48,6 @@ def launch_flask_server_worker():
     except Exception as server_error:
         print(f"[CRITICAL_ERROR] Flask Server Thread Exception: {server_error}")
 
-# ==============================================================================
-# 2. MEGA SQLITE DATABASE & ORM CLUSTER ARCHITECTURE
-# ==============================================================================
 def initialize_mega_enterprise_databases():
     with GLOBAL_SYSTEM_LOCK:
         try:
@@ -191,7 +155,6 @@ def initialize_mega_enterprise_databases():
                 hist_conn.commit()
             
             hist_conn.close()
-            print("[INFO] Mega Enterprise Cluster Databases fully initialized.")
         except Exception as db_init_err:
             print(f"[ERROR] Mega Database Initialization Exception: {db_init_err}")
 
@@ -200,8 +163,7 @@ def write_audit_log_entry(user_id, category, details):
         try:
             connection = sqlite3.connect(MASTER_DATABASE_FILE, timeout=10)
             cursor_obj = connection.cursor()
-            tz_zone = pytz.timezone('Asia/Tashkent')
-            timestamp_str = datetime.now(tz_zone).strftime("%Y-%m-%d %H:%M:%S")
+            timestamp_str = datetime.now(pytz.timezone('Asia/Tashkent')).strftime("%Y-%m-%d %H:%M:%S")
             cursor_obj.execute('''
                 INSERT INTO audit_logs (user_id, action_category, action_details, timestamp)
                 VALUES (?, ?, ?, ?)
@@ -216,8 +178,7 @@ def save_prediction_record(match, pick, total, fora, weight, init_o, curr_o):
         try:
             connection = sqlite3.connect(MASTER_DATABASE_FILE, timeout=10)
             cursor_obj = connection.cursor()
-            tz_zone = pytz.timezone('Asia/Tashkent')
-            timestamp_str = datetime.now(tz_zone).strftime("%Y-%m-%d %H:%M:%S")
+            timestamp_str = datetime.now(pytz.timezone('Asia/Tashkent')).strftime("%Y-%m-%d %H:%M:%S")
             cursor_obj.execute('''
                 INSERT INTO predictions (match_name, predicted_pick, total_pick, fora_pick, historical_weight, initial_odds, current_odds, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -232,8 +193,7 @@ def record_memory_reinforcement_pulse(match_name, minute, shift_desc, delta):
         try:
             connection = sqlite3.connect(MASTER_DATABASE_FILE, timeout=10)
             cursor_obj = connection.cursor()
-            tz_zone = pytz.timezone('Asia/Tashkent')
-            timestamp_str = datetime.now(tz_zone).strftime("%Y-%m-%d %H:%M:%S")
+            timestamp_str = datetime.now(pytz.timezone('Asia/Tashkent')).strftime("%Y-%m-%d %H:%M:%S")
             cursor_obj.execute('''
                 INSERT INTO memory_reinforcement_log (match_name, minute_mark, live_pulse_shift, confidence_delta, timestamp)
                 VALUES (?, ?, ?, ?, ?)
@@ -248,8 +208,7 @@ def record_simulation_metrics_db(match_name, h_win, a_win, draw, exp_goals):
         try:
             connection = sqlite3.connect(MASTER_DATABASE_FILE, timeout=10)
             cursor_obj = connection.cursor()
-            tz_zone = pytz.timezone('Asia/Tashkent')
-            timestamp_str = datetime.now(tz_zone).strftime("%Y-%m-%d %H:%M:%S")
+            timestamp_str = datetime.now(pytz.timezone('Asia/Tashkent')).strftime("%Y-%m-%d %H:%M:%S")
             cursor_obj.execute('''
                 INSERT INTO simulation_metrics (match_name, home_win_rate, away_win_rate, draw_rate, expected_goals, simulated_at)
                 VALUES (?, ?, ?, ?, ?, ?)
@@ -266,8 +225,7 @@ def get_or_register_user_profile(user_id, username="MegaTrader"):
             cursor_obj = connection.cursor()
             cursor_obj.execute("SELECT balance, total_profit, win_count, loss_count, reputation_score, vip_status FROM users WHERE user_id = ?", (user_id,))
             row = cursor_obj.fetchone()
-            tz_zone = pytz.timezone('Asia/Tashkent')
-            timestamp_str = datetime.now(tz_zone).strftime("%Y-%m-%d %H:%M:%S")
+            timestamp_str = datetime.now(pytz.timezone('Asia/Tashkent')).strftime("%Y-%m-%d %H:%M:%S")
             if not row:
                 cursor_obj.execute('''
                     INSERT INTO users (user_id, username, balance, total_profit, win_count, loss_count, reputation_score, vip_status, registered_at)
@@ -284,9 +242,6 @@ def get_or_register_user_profile(user_id, username="MegaTrader"):
 
 initialize_mega_enterprise_databases()
 
-# ==============================================================================
-# 3. MEGA QUANTUM STATISTICAL, MONTE CARLO & MACHINE LEARNING ENGINE
-# ==============================================================================
 def query_decade_historical_archive_deep(home_team, away_team):
     try:
         hist_conn = sqlite3.connect(DEEP_ARCHIVE_DATABASE, timeout=10)
@@ -298,7 +253,6 @@ def query_decade_historical_archive_deep(home_team, away_team):
         ''', (f"%{home_team}%", f"%{away_team}%", f"%{away_team}%", f"%{home_team}%"))
         rows = hist_cursor.fetchall()
         hist_conn.close()
-        
         if rows:
             avg_dominance = sum([r[4] for r in rows]) / len(rows)
             return f"Topilgan 10 yillik chuqur arxiv yozuvlari: {len(rows)} ta. Tarixiy H2H Dominantlik: {avg_dominance:.2f}"
@@ -317,11 +271,9 @@ def run_monte_carlo_mega_simulation(xg_home, xg_away, simulations=50000):
     away_wins = 0
     draws = 0
     total_goals_sum = 0
-    
     for _ in range(simulations):
         sim_h_goals = random.choices(range(8), weights=[calculate_poisson_probability_mega(xg_home, i) for i in range(8)])[0]
         sim_a_goals = random.choices(range(8), weights=[calculate_poisson_probability_mega(xg_away, i) for i in range(8)])[0]
-        
         total_goals_sum += (sim_h_goals + sim_a_goals)
         if sim_h_goals > sim_a_goals:
             home_wins += 1
@@ -329,7 +281,6 @@ def run_monte_carlo_mega_simulation(xg_home, xg_away, simulations=50000):
             away_wins += 1
         else:
             draws += 1
-            
     return (home_wins / simulations) * 100, (away_wins / simulations) * 100, (draws / simulations) * 100, total_goals_sum / simulations
 
 def compute_kelly_criterion_stake_mega(decimal_odds, win_probability_pct):
@@ -343,12 +294,11 @@ def compute_kelly_criterion_stake_mega(decimal_odds, win_probability_pct):
 
 def generate_1000000x_mega_enterprise_ai_report(match_name="Real Madrid vs Barcelona", init_odds=2.00, curr_odds=1.72, xg_h=2.4, xg_a=0.95, user_id=None):
     historical_summary = query_decade_historical_archive_deep("Real", "Barcelona")
-    
     h_win_pct, a_win_pct, draw_pct, expected_total_goals = run_monte_carlo_mega_simulation(xg_h, xg_a)
     record_simulation_metrics_db(match_name, h_win_pct, a_win_pct, draw_pct, expected_total_goals)
     
     current_match_minute = random.randint(70, 89)
-    pulse_shift_description = f"{current_match_minute}-daqiqada mezbonlarning hujum intensivligi va pressingi 78% ga yetdi."
+    pulse_shift_description = f"{current_match_minute}-daqiqada mezbonlarning hujum intensivligi oshdi."
     record_memory_reinforcement_pulse(match_name, current_match_minute, pulse_shift_description, +8.1)
 
     intelligent_probability = min(h_win_pct + 11.2, 99.8)
@@ -361,43 +311,32 @@ def generate_1000000x_mega_enterprise_ai_report(match_name="Real Madrid vs Barce
     recommended_money_stake = (user_account_balance * kelly_stake_val) / 100
 
     primary_pick = "1-jamoa g'alabasi (G'1) yoki 1X" if h_win_pct >= a_win_pct else "2-jamoa g'alabasi (G'2) yoki X2"
-    total_market = f"Total {expected_total_goals:.1f} ustidan (Mega Mahsuldor Klaster)" if expected_total_goals > 2.5 else f"Total {expected_total_goals:.1f} ostidan (Himoyaviy Klaster)"
+    total_market = f"Total {expected_total_goals:.1f} ustidan" if expected_total_goals > 2.5 else f"Total {expected_total_goals:.1f} ostidan"
     fora_market = "Fora 1 (0) — Maksimal ishonchlilik sug'urtasi" if h_win_pct >= a_win_pct else "Fora 2 (0) — Mehmon sug'urtasi"
 
     save_prediction_record(match_name, primary_pick, total_market, fora_market, 1.65, init_odds, curr_odds)
+    current_time_display = datetime.now(pytz.timezone('Asia/Tashkent')).strftime("%d.%m.%Y | %H:%M:%S")
 
-    tz_zone = pytz.timezone('Asia/Tashkent')
-    current_time_display = datetime.now(tz_zone).strftime("%d.%m.%Y | %H:%M:%S")
-
-    mega_report_text = (
+    return (
         f"👑 <b>QUANTUM SYNDICATE PRO — 1,000,000x MEGA ENTERPRISE REPORT</b>\n\n"
         f"⚽ <b>Uchrashuv:</b> {match_name}\n"
         f"📅 <b>Vaqt:</b> {current_time_display} (GMT+5)\n"
         f"🌟 <b>VIP Profil Statusi:</b> {user_vip_status}\n\n"
         f"📜 <b>10 YILLIK CHUQUR ARXIV & H2H MATRIX:</b>\n"
         f"• {historical_summary}\n\n"
-        f"⚡ <b>LIVE MINUTE-BY-MINUTE PULSE & MEMORY REINFORCEMENT:</b>\n"
-        f"• {pulse_shift_description}\n"
-        f"• <i>Xotira har daqiqada mustahkamlandi (+8.1% adaptive boost).</i>\n\n"
-        f"🎲 <b>MONTE CARLO 50,000x SIMULYATSIYA NATIJASI:</b>\n"
-        f"• Mezbon G'alabasi: <b>%{h_win_pct:.2f}</b>\n"
-        f"• Durang: <b>%{draw_pct:.2f}</b>\n"
-        f"• Mehmon G'alabasi: <b>%{a_win_pct:.2f}</b>\n"
-        f"• Kutilayotgan O'rtacha Gollar: <b>{expected_total_goals:.2f} ta</b>\n\n"
-        f"📈 <b>Mega Kvant Intellektual Ehtimolligi:</b> %{intelligent_probability:.2f}\n"
-        f"💰 <b>KELLY & PORTFOLIO ALLOKATSIYA:</b>\n"
-        f"• Tavsiya etilgan stavka: Balansning <b>%{kelly_stake_val:.2f}</b> (~{recommended_money_stake:.1f} birlik)\n\n"
-        f"🎯 <b>ANIQ BOZOR TAVSIYALARI:</b>\n"
-        f"👉 <b>Asosiy Natija:</b> <b>{primary_pick}</b>\n"
-        f"⚽ <b>Total Bozori:</b> <b>{total_market}</b>\n"
-        f"🛡️ <b>Fora (Handicap):</b> <b>{fora_market}</b>\n"
-    )
-    return mega_report_text
-
-# ==============================================================================
-# 4. TELEGRAM BOT INTERFACE & 1000000x ADVANCED HANDLERS
-# ==============================================================================
-TELEGRAM_API_BOT_TOKEN = "8510508275:AAFWzyh0tli97UhTP6Yv5Haj7RUENWMVNl4"
+        f"⚡ <b>LIVE PULSE & MEMORY REINFORCEMENT:</b>\n"
+        f"• {pulse_shift_description}\n\n"
+        f"🎲 <b>MONTE CARLO 50,000x SIMULYATSIYA:</b>\n"
+        f"• Mezbon: <b>%{h_win_pct:.2f}</b> | Durang: <b>%{draw_pct:.2f}</b> | Mehmon: <b>%{a_win_pct:.2f}</b>\n"
+        f"• Kutilayotgan Gollar: <b>{expected_total_goals:.2f} ta</b>\n\n"
+        f"📈 <b>Ehtimollik:</b> %{intelligent_probability:.2f}\n"
+        f"💰 <b>KELLY STAKE:</b> Balansning <b>%{kelly_stake_val:.2f}</b> (~{recommended_money_stake:.1f})\n\n"
+        f"🎯 <b>TAVSIYALAR:</b>\n"
+        f"👉 <b>Asosiy:</b> <b>{primary_pick}</b>\n"
+        f"⚽ <b>Total:</b> <b>{total_market}</b>\n"
+        f"🛡️ <b>Fora:</b> <b>{fora_market}</b>\n"
+        )
+    TELEGRAM_API_BOT_TOKEN = "8510508275:AAFWzyh0tli97UhTP6Yv5Haj7RUENWMVNl4"
 telegram_bot_client = telebot.TeleBot(TELEGRAM_API_BOT_TOKEN)
 
 def build_mega_enterprise_reply_keyboard():
@@ -407,6 +346,7 @@ def build_mega_enterprise_reply_keyboard():
     btn_memory_journal = types.KeyboardButton("🧠 Xotirani Mustahkamlash Jurnali")
     btn_user_cabinet = types.KeyboardButton("💰 Mening Mega Kabinetim")
     btn_audit_history = types.KeyboardButton("📜 Audit & Harakatlar Tarixi")
+    btn_help_menu = types.KeyboardButton("❓ Yordam & Qo'llanma")
     keyboard_markup.add(btn_mega_live, btn_decade_archive, btn_memory_journal, btn_user_cabinet, btn_audit_history, btn_help_menu)
     return keyboard_markup
 
@@ -415,12 +355,12 @@ def handle_telegram_start_command(message):
     user_identifier = message.from_user.id
     user_handle = message.from_user.username or "MegaTrader"
     get_or_register_user_profile(user_identifier, user_handle)
-    write_audit_log_entry(user_identifier, "COMMAND_START", "User initialized 1,000,000x mega enterprise session.")
+    write_audit_log_entry(user_identifier, "COMMAND_START", "User initialized session.")
     
     telegram_bot_client.reply_to(
         message,
         "👑 <b>Quantum Syndicate AI Pro — 1,000,000x Mega Enterprise Cluster</b> tizimiga xush kelibsiz!\n\n"
-        "10 yillik chuqur arxiv, Monte Carlo 50,000x simulyatsiya, har daqiqalik xotirani mustahkamlash va mega tahlil motorlari to'liq quvvatda ishga tushdi.",
+        "10 yillik chuqur arxiv, Monte Carlo simulyatsiya va tahlil motorlari to'liq quvvatda ishga tushdi.",
         parse_mode="HTML",
         reply_markup=build_mega_enterprise_reply_keyboard()
     )
@@ -428,7 +368,7 @@ def handle_telegram_start_command(message):
 @telegram_bot_client.message_handler(func=lambda msg: msg.text == "👑 1,000,000x Mega Kvant Tahlil")
 def handle_telegram_mega_live_analysis(message):
     user_identifier = message.from_user.id
-    write_audit_log_entry(user_identifier, "MEGA_QUANTUM_ANALYSIS", "Requested 1,000,000x AI mega signal.")
+    write_audit_log_entry(user_identifier, "MEGA_QUANTUM_ANALYSIS", "Requested mega signal.")
     try:
         signal_output = generate_1000000x_mega_enterprise_ai_report(user_id=user_identifier)
         telegram_bot_client.reply_to(message, signal_output, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
@@ -465,9 +405,9 @@ def handle_telegram_memory_journal(message):
             telegram_bot_client.reply_to(message, "Hozircha xotirani mustahkamlash jurnali bo'sh.", reply_markup=build_mega_enterprise_reply_keyboard())
             return
             
-        history_text = "🧠 <b>Har daqiqalik xotirani mustahkamlash jurnali:</b>\n\n"
+        history_text = "🧠 <b>Xotirani mustahkamlash jurnali:</b>\n\n"
         for r in rows:
-            history_text += f"• ⚽ {r[0]} ({r[1]}-daqiqada): {r[2]} (Delta: {r[3]:+.1f}%) — <i>{r[4]}</i>\n"
+            history_text += f"• ⚽ {r[0]} ({r[1]}-daqiqada): {r[2]} (Delta: {r[3]:+.1f}%)\n"
         telegram_bot_client.reply_to(message, history_text, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
     except Exception as err:
         telegram_bot_client.reply_to(message, f"Jurnal xatosi: {err}")
@@ -475,7 +415,7 @@ def handle_telegram_memory_journal(message):
 @telegram_bot_client.message_handler(func=lambda msg: msg.text == "💰 Mening Mega Kabinetim")
 def handle_telegram_user_portfolio(message):
     user_identifier = message.from_user.id
-    write_audit_log_entry(user_identifier, "VIEW_PORTFOLIO", "Opened mega bankroll cabinet.")
+    write_audit_log_entry(user_identifier, "VIEW_PORTFOLIO", "Opened cabinet.")
     try:
         balance, profit, wins, losses, rep, vip = get_or_register_user_profile(user_identifier)
         cabinet_output = (
@@ -483,9 +423,9 @@ def handle_telegram_user_portfolio(message):
             f"• Joriy Balans: <b>{balance:.2f}</b>\n"
             f"• Umumiy Foyda / Zarar: <b>{profit:+.2f}</b>\n"
             f"• Yutuqlar: <b>{wins}</b> | Yutqazishlar: <b>{losses}</b>\n"
-            f"• Trader Obro' Reytingi: <b>{rep} ball 🌟</b>\n"
+            f"• Trader Obro': <b>{rep} ball 🌟</b>\n"
             f"• VIP Status: <b>{vip}</b>\n\n"
-            "💡 <i>Balansni o'zgartirish uchun:</i> <code>/balance 150000</code>"
+            "💡 <i>Balansni o'zgartirish:</i> <code>/balance 150000</code>"
         )
         telegram_bot_client.reply_to(message, cabinet_output, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
     except Exception as err:
@@ -494,7 +434,7 @@ def handle_telegram_user_portfolio(message):
 @telegram_bot_client.message_handler(commands=['balance'])
 def handle_telegram_balance_modification(message):
     user_identifier = message.from_user.id
-    write_audit_log_entry(user_identifier, "UPDATE_BALANCE", "Attempted balance modification.")
+    write_audit_log_entry(user_identifier, "UPDATE_BALANCE", "Balance update attempt.")
     try:
         tokens_list = message.text.split()
         if len(tokens_list) >= 2:
@@ -538,12 +478,12 @@ def handle_telegram_audit_history(message):
 def handle_telegram_help_menu(message):
     help_content_text = (
         "👑 <b>Quantum Syndicate 1,000,000x Mega Enterprise Qo'llanmasi</b>\n\n"
-        "• 👑 1,000,000x Mega Kvant Tahlil - Monte Carlo 50,000x va 10 yillik chuqur arxiv\n"
-        "• 📜 10 Yillik Chuqur Arxiv - O'tgan yillardagi barcha uchrashuvlar bazasi\n"
-        "• 🧠 Xotirani Mustahkamlash Jurnali - Har daqiqalik live mikro-o'zgarishlar\n"
-        "• 💰 Mening Mega Kabinetim - Balans va foyda nazorati\n"
-        "• /balance [summa] - Balansni qo'lda belgilash\n\n"
-        "Qo'lda tahlil qilish uchun format:\n"
+        "• 👑 1,000,000x Mega Kvant Tahlil\n"
+        "• 📜 10 Yillik Chuqur Arxiv\n"
+        "• 🧠 Xotirani Mustahkamlash Jurnali\n"
+        "• 💰 Mening Mega Kabinetim\n"
+        "• /balance [summa] - Balansni belgilash\n\n"
+        "Format:\n"
         "<code>Arsenal-Chelsea 1.90 1.70 2.5 1.0</code>"
     )
     telegram_bot_client.reply_to(message, help_content_text, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
@@ -571,13 +511,10 @@ def handle_telegram_custom_analysis_input(message):
             )
             telegram_bot_client.reply_to(message, custom_signal_result, parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
         else:
-            telegram_bot_client.reply_to(message, "Noto'g'ri format. Yordam uchun /help buyrug'ini bosing.", reply_markup=build_mega_enterprise_reply_keyboard())
+            telegram_bot_client.reply_to(message, "Noto'g'ri format. Yordam uchun /help bosing.", reply_markup=build_mega_enterprise_reply_keyboard())
     except Exception:
-        telegram_bot_client.reply_to(message, "Xatolik! Namuna bo'yicha kiriting:\n<code>Arsenal-Chelsea 1.90 1.70 2.5 1.0</code>", parse_mode="HTML", reply_markup=build_mega_enterprise_reply_keyboard())
+        telegram_bot_client.reply_to(message, "Xatolik! Namuna:\n<code>Arsenal-Chelsea 1.90 1.70 2.5 1.0</code>", parse_mode="HTML")
 
-# ==============================================================================
-# 5. ENTERPRISE CLUSTER BOOTSTRAPPER & MAIN LAUNCHER
-# ==============================================================================
 if __name__ == '__main__':
     flask_server_worker = Thread(target=launch_flask_server_worker)
     flask_server_worker.daemon = True
@@ -585,7 +522,6 @@ if __name__ == '__main__':
     
     print("======================================================================")
     print(" 1,000,000x Quantum Syndicate AI Pro — Mega Enterprise Cluster Started!")
-    print(" Monte Carlo 50k, 10-Year Deep Archives & Self-Learning Memory Active.")
     print("======================================================================")
     
     try:
@@ -593,3 +529,4 @@ if __name__ == '__main__':
         telegram_bot_client.infinity_polling(skip_pending=True, timeout=60, long_polling_timeout=60)
     except Exception as polling_err:
         print(f"[CRITICAL_ERROR] Telegram Bot Polling Exception: {polling_err}")
+            
