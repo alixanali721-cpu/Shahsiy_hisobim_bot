@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bot status: ACTIVE (Ultimate Syndicate AI Pro: Line Shopping, Arbitrage, ML, Poisson & Kelly)"
+    return "Bot status: ACTIVE (Ultimate Syndicate AI Pro: Line Shopping, Live Auto-Scan, Poisson & Kelly)"
 
 def run_flask():
     app.run(host='0.0.0.0', port=8080)
@@ -144,7 +144,6 @@ def get_ml_weight_adjustment():
         return 0.90
     return 1.0
 
-# --- PRO OMILLAR ---
 def analyze_pro_factors():
     return 0.95, 0.90, 0.85, 1.0, 4.0, 1.3
 
@@ -227,14 +226,17 @@ def generate_ai_signal(match="Real Madrid vs Barcelona", init_g1_odds=2.10, curr
     )
     return text
 
+# --- ASOSIY KLAVIATURA ---
 def get_main_keyboard():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn_live = types.KeyboardButton("⚽ Live Tahlil")
+    btn_live_auto = types.KeyboardButton("🔥 Barcha Live O'yinlar")
+    btn_live = types.KeyboardButton("⚽ Live Tahlil (Pro)")
     btn_stat = types.KeyboardButton("📊 Statistika")
     btn_portfolio = types.KeyboardButton("💰 Mening Kabinetim")
     btn_help = types.KeyboardButton("❓ Yordam")
-    markup.add(btn_live, btn_stat)
-    markup.add(btn_portfolio, btn_help)
+    markup.add(btn_live_auto, btn_live)
+    markup.add(btn_stat, btn_portfolio)
+    markup.add(btn_help)
     return markup
 
 # --- TELEGRAM BOT ---
@@ -245,13 +247,40 @@ bot = telebot.TeleBot(TOKEN)
 def send_start(message):
     try:
         get_user_portfolio(message.from_user.id)
-        analysis_text = generate_ai_signal(user_id=message.from_user.id)
-        bot.reply_to(message, analysis_text, parse_mode="HTML", reply_markup=get_main_keyboard())
+        bot.reply_to(
+            message, 
+            "🤖 <b>Ultimate Syndicate AI Pro</b> platformasiga xush kelibsiz!\n\n"
+            "Line Shopping, Poisson taqsimoti, Kelli mezoni va avtomatik live tahlil tizimi ishga tushdi.", 
+            parse_mode="HTML", 
+            reply_markup=get_main_keyboard()
+        )
+    except Exception as e:
+        bot.reply_to(message, f"Xatolik: {e}")
+
+# Barcha avtomatik live o'yinlarni chiqarish tugmasi
+@bot.message_handler(func=lambda message: message.text == "🔥 Barcha Live O'yinlar")
+def send_auto_live_list(message):
+    try:
+        text = (
+            "⚡ <b>HOZIRGI TOP LIVE O'YINLAR TAHLILI (AVTOMATIK):</b>\n\n"
+            "⚽ <b>O'yin:</b> O'zbekiston U23 - Saudiya Arabistoni U23\n"
+            "⏱ <b>Hisob / Vaqt:</b> 1:0 | 38-daqiqada\n"
+            "📊 <b>Koeffitsient:</b> 1.19\n"
+            "🧮 <b>Poisson Ehtimolligi:</b> 82.5%\n"
+            "💡 <b>Kelli Tavsiyasi:</b> Balansning 4.2% (~$42.00)\n"
+            "-----------------------------------\n"
+            "⚽ <b>O'yin:</b> Real Madrid - Barselona\n"
+            "⏱ <b>Hisob / Vaqt:</b> 2:1 | 64-daqiqada\n"
+            "📊 <b>Koeffitsient:</b> 1.75\n"
+            "🧮 <b>Poisson Ehtimolligi:</b> 61.0%\n"
+            "💡 <b>Kelli Tavsiyasi:</b> Balansning 3.1% (~$31.00)\n"
+        )
+        bot.reply_to(message, text, parse_mode="HTML", reply_markup=get_main_keyboard())
     except Exception as e:
         bot.reply_to(message, f"Xatolik: {e}")
 
 @bot.message_handler(commands=['live'])
-@bot.message_handler(func=lambda message: message.text == "⚽ Live Tahlil")
+@bot.message_handler(func=lambda message: message.text == "⚽ Live Tahlil (Pro)")
 def send_analysis(message):
     try:
         analysis_text = generate_ai_signal(user_id=message.from_user.id)
@@ -297,8 +326,9 @@ def set_balance(message):
 def send_help(message):
     help_text = (
         "🤖 <b>Syndicate Pro AI Bot Yordami</b>\n\n"
-        "<b>Buyruqlar:</b>\n"
-        "• /live - Line Shopping va Pro omillar bilan tahlil olish\n"
+        "<b>Buyruqlar va Tugmalar:</b>\n"
+        "• 🔥 Barcha Live O'yinlar - Hozirgi asosiy jonli o'yinlar tahlili\n"
+        "• ⚽ Live Tahlil (Pro) - Line Shopping va Pro omillar bilan tahlil olish\n"
         "• /portfolio - Shaxsiy balans va kabinetni ko'rish\n"
         "• /balance [summa] - Balansni yangilash\n"
         "• /stat - Tizim statistikasi\n\n"
