@@ -356,3 +356,4 @@ if __name__ == '__main__':
     print("Syndicate Pro AI Bot barcha imkoniyatlar bilan ishga tushdi!")
     bot.remove_webhook()
     bot.infinity_polling(skip_pending=True)
+    
