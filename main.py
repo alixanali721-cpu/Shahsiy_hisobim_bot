@@ -407,4 +407,5 @@ def build_mega_enterprise_reply_keyboard():
     keyboard_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     btn_mega_live = types.KeyboardButton("👑 1,000,000x Mega Kvant Tahlil")
     btn_decade_archive = types.KeyboardButton("📜 10 Yillik Chuqur Arxiv")
-    btn_memory_journal = types.KeyboardButton("🧠 Xo
+    btn_memory_journal = types.KeyboardButton("🧠 Xotirani Mustahkamlash Jurnali")
+    
